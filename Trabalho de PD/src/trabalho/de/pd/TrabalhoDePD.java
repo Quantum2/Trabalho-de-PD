@@ -5,8 +5,10 @@
  */
 package trabalho.de.pd;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -21,15 +23,6 @@ public class TrabalhoDePD {
     /**
      * @param args the command line arguments
      */
-    public void send() throws IOException
-    {
-        ByteArrayOutputStream byteout=new ByteArrayOutputStream(MAX_SIZE);
-        ObjectOutputStream send=new ObjectOutputStream(byteout);
-        send.writeObject(sendMSG);
-        packet.setData(byteout.toByteArray());
-        packet.setLength(byteout.size());
-        socket.send(packet);
-    }
     public static void main(String[] args) {
         String hostname = "225.15.15.15";
         int port = 7000;
@@ -50,7 +43,7 @@ public class TrabalhoDePD {
             ByteArrayOutputStream bOut = new ByteArrayOutputStream(1000);
             ObjectOutputStream out = new ObjectOutputStream(bOut);
             out.writeObject(cinfo);
-            DatagramPacket packet = new DatagramPacket();
+            DatagramPacket packet = new DatagramPacket(bOut.toByteArray(), bOut.size());
             System.out.println("Looking up hostname " + hostname);
             
 
@@ -60,13 +53,20 @@ public class TrabalhoDePD {
             // ADDRESS PACKET TO SENDER
             packet.setAddress(addr);
             // SET PORT NUMBER TO 7000
-            packet.setPort(7000);
+            packet.setPort(port);
             // SEND THE PACKET - REMEMBER NO GUARANTEE OF DELIVERY
             socket.send(packet);
             System.out.println("Packet sent!");
         } catch (UnknownHostException e) {
             System.err.println("Can't find host " + hostname);
         } catch (IOException e) {
+            System.err.println("Error - " + e);
+        }
+        
+        try {
+            socket.receive(packet);
+            ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
+        } catch(IO Exception e) {
             System.err.println("Error - " + e);
         }
     }
