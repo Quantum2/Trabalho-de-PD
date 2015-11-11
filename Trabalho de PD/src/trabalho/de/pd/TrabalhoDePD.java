@@ -21,6 +21,15 @@ public class TrabalhoDePD {
     /**
      * @param args the command line arguments
      */
+    public void send() throws IOException
+    {
+        ByteArrayOutputStream byteout=new ByteArrayOutputStream(MAX_SIZE);
+        ObjectOutputStream send=new ObjectOutputStream(byteout);
+        send.writeObject(sendMSG);
+        packet.setData(byteout.toByteArray());
+        packet.setLength(byteout.size());
+        socket.send(packet);
+    }
     public static void main(String[] args) {
         String hostname = "225.15.15.15";
         int port = 7000;
@@ -38,7 +47,7 @@ public class TrabalhoDePD {
             System.out.println("Bound to local port " + socket.getLocalPort());
             
             // CREATE A DATAGRAM PACKET, CONTAINING OUR BYTE ARRAY
-            ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+            ByteArrayOutputStream bOut = new ByteArrayOutputStream(1000);
             ObjectOutputStream out = new ObjectOutputStream(bOut);
             out.writeObject(cinfo);
             DatagramPacket packet = new DatagramPacket();
