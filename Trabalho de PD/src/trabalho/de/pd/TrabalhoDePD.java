@@ -16,7 +16,6 @@ public class TrabalhoDePD {
      */
     public static void main(String[] args) {
 
-        //nao curto o trifasico
     }
 
 }
