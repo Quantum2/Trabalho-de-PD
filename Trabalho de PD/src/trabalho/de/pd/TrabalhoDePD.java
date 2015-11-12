@@ -15,6 +15,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Rafael
@@ -23,10 +25,10 @@ public class TrabalhoDePD {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        String hostname = "225.15.15.15";
-        int port = 7000;
-        
+    final static String hostname = "225.15.15.15";
+    final static int port = 7000;
+    
+    public static void autentica() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Username: ");
         String username = sc.next();
@@ -57,17 +59,23 @@ public class TrabalhoDePD {
             // SEND THE PACKET - REMEMBER NO GUARANTEE OF DELIVERY
             socket.send(packet);
             System.out.println("Packet sent!");
+            
+            socket.receive(packet);
+            ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
+            in.readObject();
         } catch (UnknownHostException e) {
             System.err.println("Can't find host " + hostname);
         } catch (IOException e) {
             System.err.println("Error - " + e);
-        }
-        
-        try {
-            socket.receive(packet);
-            ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
-        } catch(IO Exception e) {
+        } catch (ClassNotFoundException e) {
             System.err.println("Error - " + e);
         }
+    }
+    
+    
+    public static void main(String[] args) {
+        
+        autentica();
+        
     }
 }
