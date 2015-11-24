@@ -33,7 +33,7 @@ public class TrabalhoDePD {
         Cliente cliente = new Cliente();
         //autentica deve devolver as informacoes do servidor
         cliente.autentica();
-        Socket servidorPrincipal=cliente.ligacaoServidor(/*Informacoes do servidor*/);
+        cliente.ligacaoServidor(/*Informacoes do servidor*/);
         
     }
 }

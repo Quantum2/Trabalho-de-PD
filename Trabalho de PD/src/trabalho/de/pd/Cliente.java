@@ -25,13 +25,17 @@ public class Cliente {
     final static String hostnameDiretoria = "225.15.15.15";
     final static int portDiretoria = 7000;
     
+    Socket servidorPrincipal = null;
+    ClienteInfo cinfo = null;
+    ListaFicheiros listaFicheirosServidor = null;
+    
     public void autentica() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Username: ");
         String username = sc.next();
         System.out.println("Password: ");
         String password = sc.next();
-        ClienteInfo cinfo = new ClienteInfo(username,password);
+        cinfo = new ClienteInfo(username,password);
         try {
             System.out.println("Binding to a local port");
             // CREATE A DATAGRAM SOCKET, BOUND TO ANY AVAILABLE LOCAL PORT
@@ -69,14 +73,14 @@ public class Cliente {
         }
     }
     
-    public Socket ligacaoServidor(/*Informacoes servidor*/) {
+    public void ligacaoServidor(/*Informacoes servidor*/) {
         
         // GET THE HOSTNAME OF SERVER
         String hostServidor = "placeholder";
         int portServidor = 1231;
-        Socket servidorPrincipal = null;
+        
         try {
-            servidorPrincipal = new Socket(hostnameDiretoria, portServidor);
+            servidorPrincipal = new Socket(hostServidor, portServidor);
             System.out.println("Connection established");
             // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
             servidorPrincipal.setSoTimeout(2000); //ms
@@ -88,6 +92,9 @@ public class Cliente {
         } catch (IOException e) { //catches also InterruptedIOException
             System.err.println("Error " + e);
         }
-        return servidorPrincipal;
+    }
+    
+    public void setListaFicheirosServidor(ListaFicheiros listaFicheirosServidor) {
+        this.listaFicheirosServidor=listaFicheirosServidor;
     }
 }
