@@ -34,6 +34,7 @@ public class TrabalhoDePD {
         //autentica deve devolver as informacoes do servidor
         cliente.autentica();
         cliente.ligacaoServidor(/*Informacoes do servidor*/);
-        
+        AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(cliente);
+        Thread atualizaFicheirosServidor= new Thread(runnableAtualizador);
     }
 }
