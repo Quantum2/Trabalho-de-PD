@@ -28,13 +28,21 @@ public class Cliente {
     Socket servidorPrincipal = null;
     ClienteInfo cinfo = null;
     ListaFicheiros listaFicheirosServidor = null;
+    Thread atualizaFicheirosServidor = null;
     
-    public void autentica() {
-        Scanner sc = new Scanner(System.in);
+    public void inicializa(String username,String password) {
+        autentica(username,password);
+        ligacaoServidor(/*Informacoes do servidor*/);
+        AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(this);
+        atualizaFicheirosServidor= new Thread(runnableAtualizador);
+    }
+    
+    void autentica(String username,String password) {
+        //Scanner sc = new Scanner(System.in);
         System.out.println("Username: ");
-        String username = sc.next();
+        //String username = sc.next();
         System.out.println("Password: ");
-        String password = sc.next();
+        //String password = sc.next();
         cinfo = new ClienteInfo(username,password);
         try {
             System.out.println("Binding to a local port");
@@ -73,7 +81,7 @@ public class Cliente {
         }
     }
     
-    public void ligacaoServidor(/*Informacoes servidor*/) {
+    void ligacaoServidor(/*Informacoes servidor*/) {
         
         // GET THE HOSTNAME OF SERVER
         String hostServidor = "placeholder";
