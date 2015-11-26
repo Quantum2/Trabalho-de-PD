@@ -5,7 +5,7 @@
  */
 package clienteUI;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.util.Observable;
 import java.util.Observer;
@@ -35,8 +35,8 @@ public class FicheirosServidor extends JPanel implements Observer {
         JScrollPane pane = new JScrollPane(list);
         for (int i = 0; i < 15; i++)
             model.addElement("Element " + i);
-        
-        add(pane);
+        setLayout(new BorderLayout());
+        add(list);
     }
     
     @Override

@@ -5,12 +5,14 @@
  */
 package clienteUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import trabalho.de.pd.*;
 import javax.swing.JFrame;
@@ -40,14 +42,17 @@ public class Janela extends JFrame {
     Janela thisJanela=this;
     
     JPanel painelPrincipal;
+    JPanel painelListas;
+    
     FicheirosServidor listaServidor;
+    FicheirosServidor listaCliente;
     
     Janela(String nome, int x, int y, int h, int w, Cliente cliente) {
 		super(nome);
 		setSize(h,w);
 		setLocation(x,y);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                setMinimumSize(new Dimension(800, 600));
+                setMinimumSize(new Dimension(640, 480));
 		this.cliente=cliente;
 		inicializaJanela();
 	}
@@ -57,12 +62,17 @@ public class Janela extends JFrame {
         Container cp = getContentPane();
         
         painelPrincipal = new JPanel();
-        painelPrincipal.setLayout(new GridLayout(1,2));
-        painelPrincipal.setBackground(Color.gray);
+        painelPrincipal.setLayout(new BorderLayout());
         cp.add(painelPrincipal);
         
+        painelListas = new JPanel(new GridLayout(1,2));
+        painelPrincipal.add(painelListas,BorderLayout.CENTER);
+        
         listaServidor = new FicheirosServidor(this,cliente);
-        painelPrincipal.add(listaServidor);
+        painelListas.add(listaServidor);
+        listaCliente = new FicheirosServidor(this,cliente);
+        painelListas.add(listaCliente);
+        painelPrincipal.add(new JPanel(new BorderLayout()).add(new JButton("OK")),BorderLayout.SOUTH);
         
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
