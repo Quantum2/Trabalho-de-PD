@@ -41,12 +41,12 @@ public class Cliente {
     Thread atualizaFicheirosServidor = null;
     ServidorInfo servidorInfo = null;
     File localDirectory;
+    String localDirectoryPath;
     
     public void Cliente() {
         Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        localDirectory = new File(s);
-        System.out.println("Current relative path is: " + s);
+        localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current relative path is: " + localDirectoryPath);
     }
     
     public void inicializa(String username,String password) {
@@ -100,7 +100,7 @@ public class Cliente {
         }
     }
     
-    public void downloadFicheiro(String fileToGet,String stringLocalDirectory) {
+    public void downloadFicheiro(String fileToGet) {
         
         String fileName, localFilePath = null;
         FileOutputStream localFileOutputStream = null;
@@ -116,7 +116,7 @@ public class Cliente {
         }        
         */
         fileName = fileToGet.trim();
-        localDirectory = new File(stringLocalDirectory.trim());
+        localDirectory = new File(localDirectoryPath);
         
         if(!localDirectory.exists()){
             System.out.println("A directoria " + localDirectory + " nao existe!");
@@ -130,6 +130,11 @@ public class Cliente {
         
         if(!localDirectory.canWrite()){
             System.out.println("Sem permissoes de escrita na directoria " + localDirectory);
+            return;
+        }
+        
+        if (new File(fileToGet).exists()) {
+            //Avisar algures que ficheiro já existe no lado do cliente
             return;
         }
         
