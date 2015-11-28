@@ -6,7 +6,6 @@
 package clienteUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -23,7 +22,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 /**
@@ -43,20 +41,26 @@ public class Janela extends JFrame {
     
     JPanel painelPrincipal;
     JPanel painelListas;
+    JPanel painelBotoes;
+    
+    JButton botaoDownload;
+    JButton botaoUpload;
+    JButton botaoVisualizar;
+    JButton botaoEliminar;
     
     FicheirosServidor listaServidor;
     FicheirosServidor listaCliente;
     
     Janela(String nome, int x, int y, int h, int w, Cliente cliente) {
-		super(nome);
-		setSize(h,w);
-		setLocation(x,y);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                setMinimumSize(new Dimension(640, 480));
-		this.cliente=cliente;
-		inicializaJanela();
-	}
-    
+        super(nome);
+        setSize(h, w);
+        setLocation(x, y);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(640, 480));
+        this.cliente = cliente;
+        inicializaJanela();
+    }
+
     void inicializaJanela() {
         setVisible(true);
         Container cp = getContentPane();
@@ -72,7 +76,17 @@ public class Janela extends JFrame {
         painelListas.add(listaServidor);
         listaCliente = new FicheirosServidor(this,cliente);
         painelListas.add(listaCliente);
-        painelPrincipal.add(new JPanel(new BorderLayout()).add(new JButton("OK")),BorderLayout.SOUTH);
+        
+        painelBotoes = new JPanel(new GridLayout(2,2));
+        botaoDownload = new JButton("Download");
+        botaoUpload = new JButton ("Upload");
+        botaoVisualizar = new JButton ("Visualizar");
+        botaoEliminar = new JButton ("Eliminar");
+        painelBotoes.add(botaoDownload);
+        painelBotoes.add(botaoUpload);
+        painelBotoes.add(botaoVisualizar);
+        painelBotoes.add(botaoEliminar);
+        painelPrincipal.add(painelBotoes,BorderLayout.SOUTH);
         
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");

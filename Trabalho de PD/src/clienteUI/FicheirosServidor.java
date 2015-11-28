@@ -36,7 +36,7 @@ public class FicheirosServidor extends JPanel implements Observer {
         for (int i = 0; i < 15; i++)
             model.addElement("Element " + i);
         setLayout(new BorderLayout());
-        add(list);
+        add(pane);
     }
     
     @Override

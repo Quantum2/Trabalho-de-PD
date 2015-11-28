@@ -21,6 +21,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
@@ -38,6 +40,14 @@ public class Cliente {
     ListaFicheiros listaFicheirosServidor = null;
     Thread atualizaFicheirosServidor = null;
     ServidorInfo servidorInfo = null;
+    File localDirectory;
+    
+    public void Cliente() {
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        localDirectory = new File(s);
+        System.out.println("Current relative path is: " + s);
+    }
     
     public void inicializa(String username,String password) {
         autentica(username,password);
@@ -90,11 +100,10 @@ public class Cliente {
         }
     }
     
-    public void pedeFicheiro(String fileToGet,String stringLocalDirectory) {
-        File localDirectory;
+    public void downloadFicheiro(String fileToGet,String stringLocalDirectory) {
+        
         String fileName, localFilePath = null;
         FileOutputStream localFileOutputStream = null;
-        int serverPort;
         Socket socketToServer = null;
         PrintWriter pout;
         InputStream in;
