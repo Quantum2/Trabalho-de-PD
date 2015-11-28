@@ -22,19 +22,20 @@ import java.util.Scanner;
  * @author Carlos Oliveira
  */
 public class Cliente {
-    final static String hostnameDiretoria = "225.15.15.15";
-    final static int portDiretoria = 7000;
+    final static String HOSTNAME_DIRETORIA = "225.15.15.15";
+    final static int PORT_DIRETORIA = 7000;
     
     Socket servidorPrincipal = null;
-    ClienteInfo cinfo = null;
+    ClienteInfo clienteInfo = null;
     ListaFicheiros listaFicheirosServidor = null;
     Thread atualizaFicheirosServidor = null;
+    ServidorInfo servidorInfo = null;
     
     public void inicializa(String username,String password) {
         autentica(username,password);
-        ligacaoServidor(/*Informacoes do servidor*/);
+        ligacaoServidor();
         AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(this);
-        atualizaFicheirosServidor= new Thread(runnableAtualizador);
+        atualizaFicheirosServidor = new Thread(runnableAtualizador);
     }
     
     void autentica(String username,String password) {
@@ -43,7 +44,7 @@ public class Cliente {
         //String username = sc.next();
         System.out.println("Password: ");
         //String password = sc.next();
-        cinfo = new ClienteInfo(username,password);
+        clienteInfo = new ClienteInfo(username,password);
         try {
             System.out.println("Binding to a local port");
             // CREATE A DATAGRAM SOCKET, BOUND TO ANY AVAILABLE LOCAL PORT
@@ -53,27 +54,27 @@ public class Cliente {
             // CREATE A DATAGRAM PACKET, CONTAINING OUR BYTE ARRAY
             ByteArrayOutputStream bOut = new ByteArrayOutputStream(1000);
             ObjectOutputStream out = new ObjectOutputStream(bOut);
-            out.writeObject(cinfo);
+            out.writeObject(clienteInfo);
+            out.flush();
             DatagramPacket packet = new DatagramPacket(bOut.toByteArray(), bOut.size());
-            System.out.println("Looking up hostname " + hostnameDiretoria);
+            System.out.println("Looking up hostname " + HOSTNAME_DIRETORIA);
             
-
             // LOOKUP THE SPECIFIED HOSTNAME, AND GET AN INETADDRESS
-            InetAddress addr = InetAddress.getByName(hostnameDiretoria);
+            InetAddress addr = InetAddress.getByName(HOSTNAME_DIRETORIA);
             System.out.println("Hostname resolved as " + addr.getHostAddress());
             // ADDRESS PACKET TO SENDER
             packet.setAddress(addr);
             // SET PORT NUMBER TO 7000
-            packet.setPort(portDiretoria);
+            packet.setPort(PORT_DIRETORIA);
             // SEND THE PACKET - REMEMBER NO GUARANTEE OF DELIVERY
             socket.send(packet);
             System.out.println("Packet sent!");
             
             socket.receive(packet);
             ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
-            in.readObject();
+            servidorInfo = (ServidorInfo)in.readObject();
         } catch (UnknownHostException e) {
-            System.err.println("Can't find host " + hostnameDiretoria);
+            System.err.println("Can't find host " + HOSTNAME_DIRETORIA);
         } catch (IOException e) {
             System.err.println("Error - " + e);
         } catch (ClassNotFoundException e) {
@@ -81,11 +82,15 @@ public class Cliente {
         }
     }
     
-    void ligacaoServidor(/*Informacoes servidor*/) {
+    public void pedeFicheiro() {
+        
+    }
+    
+    void ligacaoServidor() {
         
         // GET THE HOSTNAME OF SERVER
-        String hostServidor = "placeholder";
-        int portServidor = 1231;
+        String hostServidor = servidorInfo.getIP();
+        int portServidor = servidorInfo.getPort();
         
         try {
             servidorPrincipal = new Socket(hostServidor, portServidor);
