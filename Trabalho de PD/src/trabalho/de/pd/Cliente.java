@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -24,6 +26,8 @@ import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,8 +39,15 @@ public class Cliente {
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
     
+    public final static int DOWNLOAD = 1;
+    public final static int UPLOAD = 2;
+    public final static int ELIMINAR = 3;
+    
     //socket principal
     Socket servidorPrincipal = null;
+    OutputStream principalOut = null;
+    PrintStream principalPrintStream = null;
+    ObjectOutputStream principalOOS = null;
     //socket a correr na thread AtualizaInformacao para atualizar ficheiros disponiveis no servidor
     Socket socketAtualizaInformacao = null;
     ClienteInfo clienteInfo = null;
@@ -115,6 +126,9 @@ public class Cliente {
             System.out.println("Connection established");
             // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
             servidorPrincipal.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
+            principalOut = servidorPrincipal.getOutputStream();
+            principalPrintStream = new PrintStream(principalOut);
+            principalOOS = new ObjectOutputStream(principalOut);
             // READ FROM THE SERVER
             //BufferedReader reader = new BufferedReader(new InputStreamReader(servidorPrincipal.getInputStream()));
             //System.out.println("Results : " + reader.readLine());
@@ -124,6 +138,16 @@ public class Cliente {
             socketAtualizaInformacao.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
         } catch (IOException e) { //catches also InterruptedIOException
             System.err.println("Error " + e);
+        }
+    }
+    
+    public void enviaPedido(String nomeFicheiro, int tipoPedido) {
+        Pedido novoPedido = new Pedido(nomeFicheiro,DOWNLOAD);
+        try {
+            principalOOS.writeObject(novoPedido);
+            principalOOS.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -165,6 +189,8 @@ public class Cliente {
             System.out.println("Ficheiro já existe, não irá ser feito o seu download outra vez.");
             return;
         }
+        
+        enviaPedido(fileToGet,DOWNLOAD);
         
         try{
             try{
@@ -215,21 +241,12 @@ public class Cliente {
             }
             
         }finally{
-            
-            if(socketToServer != null){
-                try {
-                    socketToServer.close();
-                } catch (IOException ex) {}
-            }
-            
             if(localFileOutputStream != null){
                 try{
                     localFileOutputStream.close();
                 }catch(IOException e){}
             }
-            
-        }               
-
+        }
    }
     
     public void setListaFicheirosServidor(ListaFicheiros listaFicheirosServidor) {

@@ -72,9 +72,9 @@ public class Janela extends JFrame {
         painelListas = new JPanel(new GridLayout(1,2));
         painelPrincipal.add(painelListas,BorderLayout.CENTER);
         
-        listaServidor = new TabelaFicheiros(this,cliente);
+        listaServidor = new TabelaFicheiros(this,cliente,true);
         painelListas.add(listaServidor);
-        listaCliente = new TabelaFicheiros(this,cliente);
+        listaCliente = new TabelaFicheiros(this,cliente,false);
         painelListas.add(listaCliente);
         
         painelBotoes = new JPanel(new GridLayout(2,2));
@@ -122,6 +122,5 @@ public class Janela extends JFrame {
                 System.exit(0);
             }
         });
-        
     }
 }

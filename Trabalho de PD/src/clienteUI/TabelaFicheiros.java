@@ -27,19 +27,24 @@ public class TabelaFicheiros extends JPanel implements Observer {
 
     Janela janela=null;
     Cliente cliente=null;
-    JList list;
-    DefaultListModel model;
-    DefaultTableModel tableModel;
-    JTable table;
+    JList list = null;
+    DefaultListModel model = null;
+    DefaultTableModel tableModel = null;
+    JTable table = null;
     
-    public TabelaFicheiros(Janela janela,Cliente cliente) {
+    public TabelaFicheiros(Janela janela,Cliente cliente,boolean bool) {
         this.janela=janela;
         this.cliente=cliente;
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
+        table.setAutoCreateRowSorter(true);
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
-        repaint();
+        tableModel.addRow(new Object[]{"asdasdasd.CENAS","14526 bytes"});
+        tableModel.addRow(new Object[]{"csasdds.CENAS","54526 bytes"});
+        JScrollPane pane = new JScrollPane(table);
+        setLayout(new BorderLayout());
+        add(pane);
         /*
         model=new DefaultListModel();
         list = new JList(model);
@@ -51,30 +56,32 @@ public class TabelaFicheiros extends JPanel implements Observer {
         setLayout(new BorderLayout());
         add(pane);
         */
-        JScrollPane pane = new JScrollPane(table);
-        setLayout(new BorderLayout());
-        add(pane);
     }
     
     @Override
     public void update(Observable o, Object arg) {
-        janela.repaint();
+        repaint();
     }
     
+    @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        System.out.println("paintComponent");
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
         File localDirectory = new File(cliente.getLocalDirectoryPath());
         File[] listaFicheiros = localDirectory.listFiles();
-        tableModel.setRowCount(listaFicheiros.length);
+        //tableModel.setRowCount(listaFicheiros.length);
         Object[] o = {"Cenas","1"};
+        tableModel.addRow(new Object[]{"v1","v2"});
         tableModel.addRow(o);
+        /*
         for (File ficheiro : listaFicheiros) {
             Object[] p = {ficheiro.getName(),ficheiro.length()};
             tableModel.addRow(p);
         }
-        
+        */
     }
     
 }
