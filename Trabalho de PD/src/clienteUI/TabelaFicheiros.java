@@ -15,6 +15,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import trabalho.de.pd.*;
@@ -23,7 +26,7 @@ import trabalho.de.pd.*;
  *
  * @author LittleBeast7
  */
-public class TabelaFicheiros extends JPanel implements Observer {
+public class TabelaFicheiros extends JPanel implements Observer,ListSelectionListener {
 
     Janela janela=null;
     Cliente cliente=null;
@@ -31,13 +34,17 @@ public class TabelaFicheiros extends JPanel implements Observer {
     DefaultListModel model = null;
     DefaultTableModel tableModel = null;
     JTable table = null;
+    boolean souServidor;
     
-    public TabelaFicheiros(Janela janela,Cliente cliente,boolean bool) {
+    public TabelaFicheiros(Janela janela,Cliente cliente,boolean souServidor) {
         this.janela=janela;
         this.cliente=cliente;
+        this.souServidor=souServidor;
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
         table.setAutoCreateRowSorter(true);
+        ListSelectionModel selectionModel = table.getSelectionModel();
+        selectionModel.addListSelectionListener(this);
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
         tableModel.addRow(new Object[]{"asdasdasd.CENAS","14526 bytes"});
@@ -67,7 +74,12 @@ public class TabelaFicheiros extends JPanel implements Observer {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         System.out.println("paintComponent");
-        tableModel = new DefaultTableModel();
+        tableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row,int column){
+                return false;
+            }
+        };
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
         File localDirectory = new File(cliente.getLocalDirectoryPath());
@@ -83,5 +95,16 @@ public class TabelaFicheiros extends JPanel implements Observer {
         }
         */
     }
+    public String getSelected() {
+        return (String) table.getValueAt(table.getSelectedRow(),table.getSelectedColumn());
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+            janela.deselectTable(souServidor);
+    }
     
+    public void deselectTable() {
+        table.clearSelection();
+    }
 }

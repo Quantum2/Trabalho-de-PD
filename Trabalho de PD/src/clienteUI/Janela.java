@@ -60,6 +60,13 @@ public class Janela extends JFrame {
         this.cliente = cliente;
         inicializaJanela();
     }
+    
+    public void deselectTable(boolean servidor) {
+        if (servidor) {
+            listaServidor.deselectTable();
+        } else
+            listaCliente.deselectTable();
+    }
 
     void inicializaJanela() {
         setVisible(true);
@@ -82,8 +89,8 @@ public class Janela extends JFrame {
         botaoUpload = new JButton ("Upload");
         botaoVisualizar = new JButton ("Visualizar");
         botaoEliminar = new JButton ("Eliminar");
-        painelBotoes.add(botaoDownload);
         painelBotoes.add(botaoUpload);
+        painelBotoes.add(botaoDownload);
         painelBotoes.add(botaoVisualizar);
         painelBotoes.add(botaoEliminar);
         painelPrincipal.add(painelBotoes,BorderLayout.SOUTH);
@@ -120,6 +127,34 @@ public class Janela extends JFrame {
         sairItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+        
+        botaoDownload.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cliente.downloadFicheiro(listaServidor.getSelected());
+            }
+        });
+        
+        botaoUpload.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cliente.uploadFicheiro(listaCliente.getSelected());
+            }
+        });
+        
+        botaoEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cliente.enviaPedido(listaCliente.getSelected(), Pedido.ELIMINAR);
+            }
+        });
+        
+        botaoVisualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cliente.visualizarFicheiro();
             }
         });
     }

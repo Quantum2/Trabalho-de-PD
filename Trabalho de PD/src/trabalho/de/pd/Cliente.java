@@ -5,6 +5,8 @@
  */
 package trabalho.de.pd;
 
+import java.awt.Desktop;
+import static java.awt.Desktop.getDesktop;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,10 +40,6 @@ public class Cliente {
     final static int PORT_DIRETORIA = 7000;
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
-    
-    public final static int DOWNLOAD = 1;
-    public final static int UPLOAD = 2;
-    public final static int ELIMINAR = 3;
     
     //socket principal
     Socket servidorPrincipal = null;
@@ -142,7 +140,7 @@ public class Cliente {
     }
     
     public void enviaPedido(String nomeFicheiro, int tipoPedido) {
-        Pedido novoPedido = new Pedido(nomeFicheiro,DOWNLOAD);
+        Pedido novoPedido = new Pedido(nomeFicheiro,Pedido.DOWNLOAD);
         try {
             principalOOS.writeObject(novoPedido);
             principalOOS.flush();
@@ -190,7 +188,7 @@ public class Cliente {
             return;
         }
         
-        enviaPedido(fileToGet,DOWNLOAD);
+        enviaPedido(fileToGet,Pedido.DOWNLOAD);
         
         try{
             try{
@@ -248,6 +246,23 @@ public class Cliente {
             }
         }
    }
+    
+    public void uploadFicheiro(String fileToGet) {}
+    
+    public void visualizarFicheiro() {
+        Path currentRelativePath = Paths.get("");
+        localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current relative path is: " + localDirectoryPath);
+        File teste = new File (localDirectoryPath+"\\teste.txt");
+        if (teste.exists()) {
+            Desktop dt = getDesktop();
+            try {
+                dt.open(teste);
+            } catch (IOException ex) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     
     public void setListaFicheirosServidor(ListaFicheiros listaFicheirosServidor) {
         this.listaFicheirosServidor=listaFicheirosServidor;
