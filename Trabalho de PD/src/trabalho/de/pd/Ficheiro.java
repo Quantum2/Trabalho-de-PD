@@ -7,17 +7,18 @@ package trabalho.de.pd;
 
 /**
  *
- * @author LittleBeast7
+ * @author Carlos Oliveira
  */
 public class Ficheiro {
     String nome;
     long bytes;
-    String extensao;
+    //Poderá ser útil, mas usar sempre o nome do ficheiro com a extensão será melhor
+    //String extensao;
     
-    Ficheiro(String nome,long bytes,String extensao) {
+    Ficheiro(String nome,long bytes/*,String extensao*/) {
         this.nome=nome;
         this.bytes=bytes;
-        this.extensao=extensao;
+        //this.extensao=extensao;
     }
     
     public String getNome() {
@@ -28,6 +29,7 @@ public class Ficheiro {
         return bytes;
     }
     
+    /*
     public String getExtensao() {
         return extensao;
     }
@@ -36,4 +38,5 @@ public class Ficheiro {
     public String toString() {
         return nome+"."+extensao;
     }
+    */
 }

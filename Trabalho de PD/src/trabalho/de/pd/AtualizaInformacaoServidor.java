@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author LittleBeast7
+ * @author Carlos Oliveira
  */
 public class AtualizaInformacaoServidor implements Runnable {
 
@@ -27,7 +27,7 @@ public class AtualizaInformacaoServidor implements Runnable {
         ObjectInputStream  in;
         while (true) {
             try {
-                in = new ObjectInputStream(cliente.servidorPrincipal.getInputStream());
+                in = new ObjectInputStream(cliente.socketAtualizaInformacao.getInputStream());
                 ListaFicheiros listaFicheirosServidor = (ListaFicheiros) in.readObject();
                 cliente.setListaFicheirosServidor(listaFicheirosServidor);
             } catch (IOException ex) {

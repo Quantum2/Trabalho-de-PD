@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author LittleBeast7
+ * @author Carlos Oliveira
  */
 public class ListaFicheiros {
     ArrayList<Ficheiro> listaFicheiros = null;
@@ -24,5 +24,9 @@ public class ListaFicheiros {
     
     public Ficheiro removeFicheiro(int n) {
         return listaFicheiros.remove(n);
+    }
+    
+    public void reset() {
+        listaFicheiros.clear();
     }
 }

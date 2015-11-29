@@ -35,9 +35,13 @@ public class Cliente {
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
     
+    //socket principal
     Socket servidorPrincipal = null;
+    //socket a correr na thread AtualizaInformacao para atualizar ficheiros disponiveis no servidor
+    Socket socketAtualizaInformacao = null;
     ClienteInfo clienteInfo = null;
     ListaFicheiros listaFicheirosServidor = null;
+    ListaFicheiros listaFicheirosCliente = null;
     Thread atualizaFicheirosServidor = null;
     ServidorInfo servidorInfo = null;
     File localDirectory;
@@ -100,6 +104,29 @@ public class Cliente {
         }
     }
     
+    void ligacaoServidor() {
+        
+        // GET THE HOSTNAME OF SERVER
+        String hostServidor = servidorInfo.getIP();
+        int portServidor = servidorInfo.getPort();
+        
+        try {
+            servidorPrincipal = new Socket(hostServidor, portServidor);
+            System.out.println("Connection established");
+            // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
+            servidorPrincipal.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
+            // READ FROM THE SERVER
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(servidorPrincipal.getInputStream()));
+            //System.out.println("Results : " + reader.readLine());
+            // CLOSE THE CONNECTION
+            //servidorPrincipal.close();
+            socketAtualizaInformacao = new Socket(hostServidor, portServidor);
+            socketAtualizaInformacao.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
+        } catch (IOException e) { //catches also InterruptedIOException
+            System.err.println("Error " + e);
+        }
+    }
+    
     public void downloadFicheiro(String fileToGet) {
         
         String fileName, localFilePath = null;
@@ -135,6 +162,7 @@ public class Cliente {
         
         if (new File(fileToGet).exists()) {
             //Avisar algures que ficheiro já existe no lado do cliente
+            System.out.println("Ficheiro já existe, não irá ser feito o seu download outra vez.");
             return;
         }
         
@@ -181,7 +209,7 @@ public class Cliente {
             }catch(SocketTimeoutException e){
                 System.out.println("Não foi recebida qualquer bloco adicional, podendo a transferencia estar incompleta:\n\t"+e);
             }catch(SocketException e){
-                System.out.println("Ocorreu um erro ao nÃ­vel do socket TCP:\n\t"+e);
+                System.out.println("Ocorreu um erro ao nível do socket TCP:\n\t"+e);
             }catch(IOException e){
                 System.out.println("Ocorreu um erro no acesso ao socket ou ao ficheiro local " + localFilePath +":\n\t"+e);
             }
@@ -204,28 +232,23 @@ public class Cliente {
 
    }
     
-    void ligacaoServidor() {
+    public void setListaFicheirosServidor(ListaFicheiros listaFicheirosServidor) {
+        this.listaFicheirosServidor=listaFicheirosServidor;
+    }
+    
+    public void atualizaListaFicheirosCliente() {
+        localDirectory = new File(localDirectoryPath);
+        File[] listaFicheiros = localDirectory.listFiles();
+         
+        listaFicheirosCliente.reset();
         
-        // GET THE HOSTNAME OF SERVER
-        String hostServidor = servidorInfo.getIP();
-        int portServidor = servidorInfo.getPort();
-        
-        try {
-            servidorPrincipal = new Socket(hostServidor, portServidor);
-            System.out.println("Connection established");
-            // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
-            servidorPrincipal.setSoTimeout(2000); //ms
-            // READ FROM THE SERVER
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(servidorPrincipal.getInputStream()));
-            //System.out.println("Results : " + reader.readLine());
-            // CLOSE THE CONNECTION
-            //servidorPrincipal.close();
-        } catch (IOException e) { //catches also InterruptedIOException
-            System.err.println("Error " + e);
+        for (File ficheiro : listaFicheiros) {
+            Ficheiro ficheiroTemp = new Ficheiro(ficheiro.getName(),ficheiro.length());
+            listaFicheirosCliente.addFicheiro(ficheiroTemp);
         }
     }
     
-    public void setListaFicheirosServidor(ListaFicheiros listaFicheirosServidor) {
-        this.listaFicheirosServidor=listaFicheirosServidor;
+    public String getLocalDirectoryPath() {
+        return localDirectoryPath;
     }
 }

@@ -5,6 +5,7 @@
  */
 package clienteUI;
 
+import trabalho.de.pd.*;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -13,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import trabalho.de.pd.*;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -48,8 +48,8 @@ public class Janela extends JFrame {
     JButton botaoVisualizar;
     JButton botaoEliminar;
     
-    FicheirosServidor listaServidor;
-    FicheirosServidor listaCliente;
+    TabelaFicheiros listaServidor;
+    TabelaFicheiros listaCliente;
     
     Janela(String nome, int x, int y, int h, int w, Cliente cliente) {
         super(nome);
@@ -72,9 +72,9 @@ public class Janela extends JFrame {
         painelListas = new JPanel(new GridLayout(1,2));
         painelPrincipal.add(painelListas,BorderLayout.CENTER);
         
-        listaServidor = new FicheirosServidor(this,cliente);
+        listaServidor = new TabelaFicheiros(this,cliente);
         painelListas.add(listaServidor);
-        listaCliente = new FicheirosServidor(this,cliente);
+        listaCliente = new TabelaFicheiros(this,cliente);
         painelListas.add(listaCliente);
         
         painelBotoes = new JPanel(new GridLayout(2,2));
