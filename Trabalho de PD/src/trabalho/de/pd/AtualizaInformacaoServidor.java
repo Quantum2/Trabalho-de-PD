@@ -27,7 +27,7 @@ public class AtualizaInformacaoServidor implements Runnable {
         ObjectInputStream  in;
         while (true) {
             try {
-                in = new ObjectInputStream(cliente.socketAtualizaInformacao.getInputStream());
+                in = new ObjectInputStream(cliente.getSocketAtualizaInformacao().getInputStream());
                 ListaFicheiros listaFicheirosServidor = (ListaFicheiros) in.readObject();
                 cliente.setListaFicheirosServidor(listaFicheirosServidor);
             } catch (IOException ex) {

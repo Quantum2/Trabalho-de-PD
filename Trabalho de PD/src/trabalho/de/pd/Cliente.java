@@ -27,7 +27,6 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,10 +52,10 @@ public class Cliente {
     ListaFicheiros listaFicheirosCliente = null;
     Thread atualizaFicheirosServidor = null;
     ServidorInfo servidorInfo = null;
-    File localDirectory;
-    String localDirectoryPath;
+    File localDirectory = null;
+    String localDirectoryPath = null;
     
-    public void Cliente() {
+    public Cliente() {
         Path currentRelativePath = Paths.get("");
         localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current relative path is: " + localDirectoryPath);
@@ -67,6 +66,7 @@ public class Cliente {
         ligacaoServidor();
         AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(this);
         atualizaFicheirosServidor = new Thread(runnableAtualizador);
+        atualizaFicheirosServidor.start();
     }
     
     void autentica(String username,String password) {
@@ -282,5 +282,9 @@ public class Cliente {
     
     public String getLocalDirectoryPath() {
         return localDirectoryPath;
+    }
+    
+    public Socket getSocketAtualizaInformacao() {
+        return socketAtualizaInformacao;
     }
 }

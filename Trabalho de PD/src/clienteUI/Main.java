@@ -16,7 +16,6 @@ public class Main {
     
     public static void main (String args[]) {
         Cliente cliente = new Cliente();
-		
         janela = new Janela("Programação Distribuida - Cliente", 300, 150, 640, 480, cliente);
     }
     
