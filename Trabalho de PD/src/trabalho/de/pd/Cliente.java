@@ -29,14 +29,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import trabalho.de.pd.servidor.HeartBeat;
 
 /**
  *
  * @author Carlos Oliveira
  */
 public class Cliente {
-    final static String HOSTNAME_DIRETORIA = "225.15.15.15";
-    final static int PORT_DIRETORIA = 7000;
+    final static String HOSTNAME_DIRETORIA = "192.168.1.34";
+    final static int PORT_DIRETORIA = 7001;
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
     
@@ -51,7 +52,7 @@ public class Cliente {
     ListaFicheiros listaFicheirosServidor = null;
     ListaFicheiros listaFicheirosCliente = null;
     Thread atualizaFicheirosServidor = null;
-    ServidorInfo servidorInfo = null;
+    HeartBeat servidorInfo = null;
     File localDirectory = null;
     String localDirectoryPath = null;
     
@@ -71,9 +72,9 @@ public class Cliente {
     
     void autentica(String username,String password) {
         //Scanner sc = new Scanner(System.in);
-        System.out.println("Username: ");
+        System.out.println("Username: " + username);
         //String username = sc.next();
-        System.out.println("Password: ");
+        System.out.println("Password: " + password);
         //String password = sc.next();
         clienteInfo = new ClienteInfo(username,password);
         try {
@@ -103,7 +104,7 @@ public class Cliente {
             
             socket.receive(packet);
             ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
-            servidorInfo = (ServidorInfo)in.readObject();
+            servidorInfo = (HeartBeat)in.readObject();
         } catch (UnknownHostException e) {
             System.err.println("Can't find host " + HOSTNAME_DIRETORIA);
         } catch (IOException e) {
@@ -116,8 +117,8 @@ public class Cliente {
     void ligacaoServidor() {
         
         // GET THE HOSTNAME OF SERVER
-        String hostServidor = servidorInfo.getIP();
-        int portServidor = servidorInfo.getPort();
+        String hostServidor = servidorInfo.getEndereço().getHostAddress();
+        int portServidor = servidorInfo.getTcpPort();
         
         try {
             servidorPrincipal = new Socket(hostServidor, portServidor);

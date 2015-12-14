@@ -69,7 +69,7 @@ public class Janela extends JFrame {
     }
 
     void inicializaJanela() {
-        setVisible(true);
+        
         Container cp = getContentPane();
         
         painelPrincipal = new JPanel();
@@ -106,6 +106,7 @@ public class Janela extends JFrame {
         menu.add(sairItem);
 
         iniciaClienteItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 JTextField username = new JTextField();
                 JPasswordField password = new JPasswordField();
@@ -117,7 +118,7 @@ public class Janela extends JFrame {
                 };
                 int n = JOptionPane.showConfirmDialog(null, inputs, "Autenticação", JOptionPane.OK_CANCEL_OPTION);
                 if (n == JOptionPane.YES_OPTION) {
-                    cliente.inicializa(username.getText(),password.getPassword().toString());
+                    cliente.inicializa(username.getText(),String.copyValueOf(password.getPassword()));
                 } else if (n == JOptionPane.NO_OPTION) {
 
                 }                
@@ -157,5 +158,6 @@ public class Janela extends JFrame {
                 cliente.visualizarFicheiro();
             }
         });
+        setVisible(true);
     }
 }
