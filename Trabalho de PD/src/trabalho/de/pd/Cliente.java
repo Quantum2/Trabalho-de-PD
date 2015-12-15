@@ -36,7 +36,7 @@ import trabalho.de.pd.servidor.HeartBeat;
  * @author Carlos Oliveira
  */
 public class Cliente {
-    final static String HOSTNAME_DIRETORIA = "192.168.1.34";
+    final static String HOSTNAME_DIRETORIA = "10.65.137.17";
     final static int PORT_DIRETORIA = 7001;
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
@@ -61,7 +61,7 @@ public class Cliente {
         localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current relative path is: " + localDirectoryPath);
     }
-    
+        
     public void inicializa(String username,String password) {
         autentica(username,password);
         ligacaoServidor();
@@ -102,6 +102,7 @@ public class Cliente {
             socket.send(packet);
             System.out.println("Packet sent!");
             
+            packet=new DatagramPacket(new byte[1000],1000);
             socket.receive(packet);
             ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
             servidorInfo = (HeartBeat)in.readObject();
