@@ -142,7 +142,7 @@ public class Cliente {
     }
     
     public void enviaPedido(String nomeFicheiro, int tipoPedido) {
-        Pedido novoPedido = new Pedido(nomeFicheiro,Pedido.DOWNLOAD);
+        Pedido novoPedido = new Pedido(nomeFicheiro,Pedido.DOWNLOAD,true);
         try {
             principalOOS.writeObject(novoPedido);
             principalOOS.flush();
