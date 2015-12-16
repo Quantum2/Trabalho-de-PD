@@ -7,7 +7,7 @@ package clienteUI;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.DefaultListModel;
@@ -35,6 +35,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
     DefaultTableModel tableModel = null;
     JTable table = null;
     boolean souServidor;
+    ArrayList<Ficheiro> listaFicheiros;
     
     public TabelaFicheiros(Janela janela,Cliente cliente,boolean souServidor) {
         this.janela=janela;
@@ -47,8 +48,18 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
         selectionModel.addListSelectionListener(this);
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
-        tableModel.addRow(new Object[]{"asdasdasd.CENAS","14526 bytes"});
-        tableModel.addRow(new Object[]{"csasdds.CENAS","54526 bytes"});
+        if (souServidor) {
+            listaFicheiros = cliente.getListaFicheirosServidor().getListaFicheiros();
+        } else {
+            listaFicheiros = cliente.getListaFicheirosCliente().getListaFicheiros();
+        }
+        if (listaFicheiros!=null) {
+            for (int i = 0; i < listaFicheiros.size(); i++) {
+                Ficheiro auxFicheiro = listaFicheiros.get(i);
+                tableModel.addRow(new Object[]{auxFicheiro.getNome(), auxFicheiro.getBytes()});
+            }
+        }
+
         JScrollPane pane = new JScrollPane(table);
         setLayout(new BorderLayout());
         add(pane);
@@ -82,12 +93,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
         };
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
-        File localDirectory = new File(cliente.getLocalDirectoryPath());
-        File[] listaFicheiros = localDirectory.listFiles();
         //tableModel.setRowCount(listaFicheiros.length);
-        Object[] o = {"Cenas","1"};
-        tableModel.addRow(new Object[]{"v1","v2"});
-        tableModel.addRow(o);
         /*
         for (File ficheiro : listaFicheiros) {
             Object[] p = {ficheiro.getName(),ficheiro.length()};

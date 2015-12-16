@@ -37,12 +37,12 @@ import trabalho.de.pd.servidor.HeartBeat;
  */
 public class Cliente {
     final static String HOSTNAME_DIRETORIA = "10.65.137.17";
-    final static int PORT_DIRETORIA = 7001;
+    final static int PORT_DIRETORIA = 7000;
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
     
     //socket principal
-    Socket servidorPrincipal = null;
+    Socket socketServidor = null;
     OutputStream principalOut = null;
     PrintStream principalPrintStream = null;
     ObjectOutputStream principalOOS = null;
@@ -122,22 +122,35 @@ public class Cliente {
         int portServidor = servidorInfo.getTcpPort();
         
         try {
-            servidorPrincipal = new Socket(hostServidor, portServidor);
+            socketServidor = new Socket(hostServidor, portServidor);
             System.out.println("Connection established");
             // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
-            servidorPrincipal.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
-            principalOut = servidorPrincipal.getOutputStream();
+            socketServidor.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
+            principalOut = socketServidor.getOutputStream();
             principalPrintStream = new PrintStream(principalOut);
             principalOOS = new ObjectOutputStream(principalOut);
+            recebeListaFicheiros();
             // READ FROM THE SERVER
             //BufferedReader reader = new BufferedReader(new InputStreamReader(servidorPrincipal.getInputStream()));
             //System.out.println("Results : " + reader.readLine());
             // CLOSE THE CONNECTION
             //servidorPrincipal.close();
-            socketAtualizaInformacao = new Socket(hostServidor, portServidor);
-            socketAtualizaInformacao.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
+            //socketAtualizaInformacao = new Socket(hostServidor, portServidor);
+            //socketAtualizaInformacao.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
+            //recebeListaFicheiros();
         } catch (IOException e) { //catches also InterruptedIOException
             System.err.println("Error " + e);
+        }
+    }
+    
+    public void recebeListaFicheiros() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(socketServidor.getInputStream());
+            listaFicheirosServidor = (ListaFicheiros)ois.readObject();
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -214,8 +227,8 @@ public class Cliente {
                 
                 socketToServer.setSoTimeout(TIMEOUT*1000);
                 */
-                in = servidorPrincipal.getInputStream();
-                pout = new PrintWriter(servidorPrincipal.getOutputStream(), true);
+                in = socketServidor.getInputStream();
+                pout = new PrintWriter(socketServidor.getOutputStream(), true);
                 
                 pout.println(fileName);
                 pout.flush();
@@ -288,5 +301,13 @@ public class Cliente {
     
     public Socket getSocketAtualizaInformacao() {
         return socketAtualizaInformacao;
+    }
+    
+    public ListaFicheiros getListaFicheirosCliente() {
+        return listaFicheirosCliente;
+    }
+    
+    public ListaFicheiros getListaFicheirosServidor() {
+        return listaFicheirosServidor;
     }
 }

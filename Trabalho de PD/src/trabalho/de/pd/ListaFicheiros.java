@@ -14,12 +14,20 @@ import java.util.ArrayList;
 public class ListaFicheiros {
     ArrayList<Ficheiro> listaFicheiros = null;
     
+    public ArrayList<Ficheiro> getListaFicheiros() {
+        return listaFicheiros;
+    }
+    
     public void addFicheiro(Ficheiro ficheiro) {
         listaFicheiros.add(ficheiro);
     }
     
     public Ficheiro getFicheiro(int n) {
         return listaFicheiros.get(n);
+    }
+    
+    public int getSize() {
+        return listaFicheiros.size();
     }
     
     public Ficheiro removeFicheiro(int n) {
