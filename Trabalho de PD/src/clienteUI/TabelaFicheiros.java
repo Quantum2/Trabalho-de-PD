@@ -41,6 +41,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
         this.janela=janela;
         this.cliente=cliente;
         this.souServidor=souServidor;
+        this.cliente.addObserver(this);
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
         table.setAutoCreateRowSorter(true);
