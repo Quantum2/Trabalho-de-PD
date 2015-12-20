@@ -7,6 +7,7 @@ package trabalho.de.pd;
 
 import java.net.Socket;
 import java.util.Observable;
+import trabalho.de.pd.servidor.ListaFicheiros;
 
 /**
  *
@@ -55,22 +56,32 @@ public class CascaCliente extends Observable {
     
     public void downloadFicheiro(String fileToGet) {
         this.c.downloadFicheiro(fileToGet);
+        setChanged();
+        notifyObservers();
     }
     
     public void uploadFicheiro(String fileToGet) {
         this.c.uploadFicheiro(fileToGet);
+        setChanged();
+        notifyObservers();
     }
     
     public void visualizarFicheiro() {
         this.c.visualizarFicheiro();
+        setChanged();
+        notifyObservers();
     }
     
     public void setListaFicheirosServidor(ListaFicheiros listaFicheirosServidor) {
         this.c.setListaFicheirosServidor(listaFicheirosServidor);
+        setChanged();
+        notifyObservers();
     }
     
     public void atualizaListaFicheirosCliente() {
         this.c.atualizaListaFicheirosCliente();
+        setChanged();
+        notifyObservers();
     }
     
     public String getLocalDirectoryPath() {

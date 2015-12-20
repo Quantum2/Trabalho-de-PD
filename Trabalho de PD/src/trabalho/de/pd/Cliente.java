@@ -30,14 +30,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import trabalho.de.pd.servidor.Ficheiro;
 import trabalho.de.pd.servidor.HeartBeat;
+import trabalho.de.pd.servidor.ListaFicheiros;
 
 /**
  *
  * @author Carlos Oliveira
  */
 public class Cliente {
-    final static String HOSTNAME_DIRETORIA = "192.168.1.7";
+    final static String HOSTNAME_DIRETORIA = "localhost";
     final static int PORT_DIRETORIA = 7001;
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;

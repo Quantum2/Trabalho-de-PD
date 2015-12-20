@@ -21,6 +21,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import trabalho.de.pd.*;
+import trabalho.de.pd.servidor.Ficheiro;
+import trabalho.de.pd.servidor.ListaFicheiros;
 
 /**
  *
@@ -36,6 +38,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
     JTable table = null;
     boolean souServidor;
     ArrayList<Ficheiro> listaFicheiros;
+    JScrollPane pane;
     
     public TabelaFicheiros(Janela janela,CascaCliente cliente,boolean souServidor) {
         this.janela=janela;
@@ -51,11 +54,11 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
         tableModel.addColumn("Tamanho");
         if (souServidor) {
             if (cliente.getListaFicheirosServidor()!=null) {
-                listaFicheiros = cliente.getListaFicheirosServidor().getListaFicheiros();
+                listaFicheiros = cliente.getListaFicheirosServidor().getArrayListFicheiro();
             }
         } else {
             if (cliente.getListaFicheirosCliente()!=null) {
-                listaFicheiros = cliente.getListaFicheirosCliente().getListaFicheiros();
+                listaFicheiros = cliente.getListaFicheirosCliente().getArrayListFicheiro();
             }
         }
         if (listaFicheiros!=null) {
@@ -64,8 +67,9 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
                 tableModel.addRow(new Object[]{auxFicheiro.getNome(), auxFicheiro.getBytes()});
             }
         }
-
-        JScrollPane pane = new JScrollPane(table);
+        Object[] p = {"a","b"};
+        tableModel.addRow(p);
+        pane = new JScrollPane(table);
         setLayout(new BorderLayout());
         add(pane);
         /*
@@ -83,7 +87,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
     
     @Override
     public void update(Observable o, Object arg) {
-        repaint();
+        janela.repaint();
     }
     
     @Override
@@ -96,15 +100,16 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
                 return false;
             }
         };
-        tableModel.addColumn("Nome");
-        tableModel.addColumn("Tamanho");
-        //tableModel.setRowCount(listaFicheiros.length);
-        /*
-        for (File ficheiro : listaFicheiros) {
-            Object[] p = {ficheiro.getName(),ficheiro.length()};
-            tableModel.addRow(p);
+        tableModel.addColumn("NomeADASD");
+        tableModel.addColumn("TamanhoASDASD");
+        //tableModel.setRowCount(listaFicheiros.size());
+        if (listaFicheiros != null) {
+            for (Ficheiro ficheiro : listaFicheiros) {
+                Object[] p = {ficheiro.getNome(), ficheiro.getBytes()};
+                tableModel.addRow(p);
+            }
         }
-        */
+        table.setModel(tableModel);
     }
     public String getSelected() {
         return (String) table.getValueAt(table.getSelectedRow(),table.getSelectedColumn());
@@ -112,7 +117,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-            janela.deselectTable(souServidor);
+        janela.deselectTable(souServidor);
     }
     
     public void deselectTable() {
