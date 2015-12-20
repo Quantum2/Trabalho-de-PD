@@ -30,7 +30,7 @@ import javax.swing.JTextField;
  */
 public class Janela extends JFrame {
     
-    Cliente cliente;
+    CascaCliente cliente;
     
     JMenuBar menuBar;
     JMenu menu;
@@ -51,7 +51,7 @@ public class Janela extends JFrame {
     TabelaFicheiros listaServidor;
     TabelaFicheiros listaCliente;
     
-    Janela(String nome, int x, int y, int h, int w, Cliente cliente) {
+    Janela(String nome, int x, int y, int h, int w, CascaCliente cliente) {
         super(nome);
         setSize(h, w);
         setLocation(x, y);

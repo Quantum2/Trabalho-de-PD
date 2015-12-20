@@ -5,6 +5,7 @@
  */
 package trabalho.de.pd;
 
+import trabalho.de.pd.servidor.ClienteInfo;
 import java.awt.Desktop;
 import static java.awt.Desktop.getDesktop;
 import java.io.ByteArrayInputStream;
@@ -36,8 +37,8 @@ import trabalho.de.pd.servidor.HeartBeat;
  * @author Carlos Oliveira
  */
 public class Cliente {
-    final static String HOSTNAME_DIRETORIA = "10.65.137.17";
-    final static int PORT_DIRETORIA = 7000;
+    final static String HOSTNAME_DIRETORIA = "192.168.1.7";
+    final static int PORT_DIRETORIA = 7001;
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
     
@@ -65,12 +66,12 @@ public class Cliente {
     public void inicializa(String username,String password) {
         autentica(username,password);
         ligacaoServidor();
-        AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(this);
-        atualizaFicheirosServidor = new Thread(runnableAtualizador);
-        atualizaFicheirosServidor.start();
+        //AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(this);
+        //atualizaFicheirosServidor = new Thread(runnableAtualizador);
+        //atualizaFicheirosServidor.start();
     }
     
-    void autentica(String username,String password) {
+    public void autentica(String username,String password) {
         //Scanner sc = new Scanner(System.in);
         System.out.println("Username: " + username);
         //String username = sc.next();
@@ -115,7 +116,7 @@ public class Cliente {
         }
     }
     
-    void ligacaoServidor() {
+    public void ligacaoServidor() {
         
         // GET THE HOSTNAME OF SERVER
         String hostServidor = servidorInfo.getEndereço().getHostAddress();
@@ -126,9 +127,9 @@ public class Cliente {
             System.out.println("Connection established");
             // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
             socketServidor.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
-            principalOut = socketServidor.getOutputStream();
-            principalPrintStream = new PrintStream(principalOut);
-            principalOOS = new ObjectOutputStream(principalOut);
+            //principalOut = socketServidor.getOutputStream();
+            //principalPrintStream = new PrintStream(principalOut);
+            //principalOOS = new ObjectOutputStream(principalOut);
             recebeListaFicheiros();
             // READ FROM THE SERVER
             //BufferedReader reader = new BufferedReader(new InputStreamReader(servidorPrincipal.getInputStream()));

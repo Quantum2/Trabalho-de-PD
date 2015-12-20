@@ -15,7 +15,7 @@ public class Main {
     static Janela janela;
     
     public static void main (String args[]) {
-        Cliente cliente = new Cliente();
+        CascaCliente cliente = new CascaCliente(new Cliente());
         janela = new Janela("Programação Distribuida - Cliente", 300, 150, 640, 480, cliente);
     }
     

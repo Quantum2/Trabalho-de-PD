@@ -29,7 +29,7 @@ import trabalho.de.pd.*;
 public class TabelaFicheiros extends JPanel implements Observer,ListSelectionListener {
 
     Janela janela=null;
-    Cliente cliente=null;
+    CascaCliente cliente=null;
     JList list = null;
     DefaultListModel model = null;
     DefaultTableModel tableModel = null;
@@ -37,7 +37,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
     boolean souServidor;
     ArrayList<Ficheiro> listaFicheiros;
     
-    public TabelaFicheiros(Janela janela,Cliente cliente,boolean souServidor) {
+    public TabelaFicheiros(Janela janela,CascaCliente cliente,boolean souServidor) {
         this.janela=janela;
         this.cliente=cliente;
         this.souServidor=souServidor;
@@ -49,9 +49,13 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
         if (souServidor) {
-            listaFicheiros = cliente.getListaFicheirosServidor().getListaFicheiros();
+            if (cliente.getListaFicheirosServidor()!=null) {
+                listaFicheiros = cliente.getListaFicheirosServidor().getListaFicheiros();
+            }
         } else {
-            listaFicheiros = cliente.getListaFicheirosCliente().getListaFicheiros();
+            if (cliente.getListaFicheirosCliente()!=null) {
+                listaFicheiros = cliente.getListaFicheirosCliente().getListaFicheiros();
+            }
         }
         if (listaFicheiros!=null) {
             for (int i = 0; i < listaFicheiros.size(); i++) {
