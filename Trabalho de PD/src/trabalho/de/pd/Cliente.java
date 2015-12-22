@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import trabalho.de.pd.servidor.Ficheiro;
 import trabalho.de.pd.servidor.HeartBeat;
 import trabalho.de.pd.servidor.ListaFicheiros;
+import trabalho.de.pd.servidor.Pedido;
 
 /**
  *
@@ -162,7 +163,7 @@ public class Cliente {
     }
     
     public void enviaPedido(String nomeFicheiro, int tipoPedido) {
-        Pedido novoPedido = new Pedido(nomeFicheiro,tipoPedido,true);
+        Pedido novoPedido = new Pedido(nomeFicheiro,tipoPedido);
         try {
             principalOOS.writeObject(novoPedido);
             principalOOS.flush();
@@ -212,20 +213,6 @@ public class Cliente {
         
         enviaPedido(fileToGet,Pedido.DOWNLOAD);
         
-        try{
-            try{
-                localFilePath = localDirectory.getCanonicalPath()+File.separator+fileName;
-                localFileOutputStream = new FileOutputStream(localFilePath);
-                System.out.println("Ficheiro " + localFilePath + " criado.");
-            }catch(IOException e){
-                if(localFilePath == null){
-                    System.out.println("Ocorreu a excepcao {" + e +"} ao obter o caminho canonico para o ficheiro local!");   
-                }else{
-                    System.out.println("Ocorreu a excepcao {" + e +"} ao tentar criar o ficheiro " + localFilePath + "!");
-                }
-                return;
-            }
-
             try{
                 /*
                 serverPort = Integer.parseInt(args[1]);
@@ -234,12 +221,15 @@ public class Cliente {
                 
                 socketToServer.setSoTimeout(TIMEOUT*1000);
                 */
-                in = socketServidor.getInputStream();
-                pout = new PrintWriter(socketServidor.getOutputStream(), true);
                 
+                pout = new PrintWriter(socketServidor.getOutputStream(), true);                
                 pout.println(fileName);
                 pout.flush();
-
+                
+                localFilePath = localDirectory.getCanonicalPath()+File.separator+fileName;
+                localFileOutputStream = new FileOutputStream(localFilePath);
+                System.out.println("Ficheiro " + localFilePath + " criado.");
+                in = socketServidor.getInputStream();
                 while((nbytes = in.read(fileChunck)) > 0){                    
                     //System.out.println("Recebido o bloco n. " + ++contador + " com " + nbytes + " bytes.");
                     localFileOutputStream.write(fileChunck, 0, nbytes);
@@ -258,15 +248,7 @@ public class Cliente {
                 System.out.println("Ocorreu um erro ao nível do socket TCP:\n\t"+e);
             }catch(IOException e){
                 System.out.println("Ocorreu um erro no acesso ao socket ou ao ficheiro local " + localFilePath +":\n\t"+e);
-            }
-            
-        }finally{
-            if(localFileOutputStream != null){
-                try{
-                    localFileOutputStream.close();
-                }catch(IOException e){}
-            }
-        }
+            }       
    }
     
     public void uploadFicheiro(String fileToGet) {}

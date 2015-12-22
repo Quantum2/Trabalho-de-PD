@@ -15,11 +15,11 @@ import trabalho.de.pd.servidor.ListaFicheiros;
  *
  * @author Carlos Oliveira
  */
-public class AtualizaInformacaoServidor implements Runnable {
+public class AtualizaInformacaoServidor extends Thread {
 
     Cliente cliente = null;
     
-    AtualizaInformacaoServidor(Cliente cliente) {
+    public AtualizaInformacaoServidor(Cliente cliente) {
         this.cliente = cliente;
     }
     
@@ -27,15 +27,17 @@ public class AtualizaInformacaoServidor implements Runnable {
     public void run() {
         ObjectInputStream  in;
         while (true) {
-            try {
-                in = new ObjectInputStream(cliente.getSocketAtualizaInformacao().getInputStream());
+            //try {
+                cliente.atualizaListaFicheirosCliente();
+                System.out.println(" actualiza: "+cliente.getListaFicheirosCliente().getSize());
+                /*in = new ObjectInputStream(cliente.getSocketAtualizaInformacao().getInputStream());
                 ListaFicheiros listaFicheirosServidor = (ListaFicheiros) in.readObject();
-                cliente.setListaFicheirosServidor(listaFicheirosServidor);
+                cliente.setListaFicheirosServidor(listaFicheirosServidor
             } catch (IOException ex) {
                 Logger.getLogger(AtualizaInformacaoServidor.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(AtualizaInformacaoServidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
         }
     }
     
