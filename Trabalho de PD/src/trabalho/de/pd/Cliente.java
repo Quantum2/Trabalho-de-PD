@@ -222,9 +222,9 @@ public class Cliente {
                 socketToServer.setSoTimeout(TIMEOUT*1000);
                 */
                 
-                pout = new PrintWriter(socketServidor.getOutputStream(), true);                
+                /*pout = new PrintWriter(socketServidor.getOutputStream(), true);                
                 pout.println(fileName);
-                pout.flush();
+                pout.flush();*/
                 
                 localFilePath = localDirectory.getCanonicalPath()+File.separator+fileName;
                 localFileOutputStream = new FileOutputStream(localFilePath);
