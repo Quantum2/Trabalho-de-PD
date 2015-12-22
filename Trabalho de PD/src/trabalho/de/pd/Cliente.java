@@ -133,9 +133,9 @@ public class Cliente {
             System.out.println("Connection established");
             // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
             socketServidor.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
-            //principalOut = socketServidor.getOutputStream();
-            //principalPrintStream = new PrintStream(principalOut);
-            //principalOOS = new ObjectOutputStream(principalOut);
+            principalOut = socketServidor.getOutputStream();
+            principalPrintStream = new PrintStream(principalOut);
+            principalOOS = new ObjectOutputStream(principalOut);
             recebeListaFicheiros();
             // READ FROM THE SERVER
             //BufferedReader reader = new BufferedReader(new InputStreamReader(servidorPrincipal.getInputStream()));
@@ -162,7 +162,7 @@ public class Cliente {
     }
     
     public void enviaPedido(String nomeFicheiro, int tipoPedido) {
-        Pedido novoPedido = new Pedido(nomeFicheiro,Pedido.DOWNLOAD,true);
+        Pedido novoPedido = new Pedido(nomeFicheiro,tipoPedido,true);
         try {
             principalOOS.writeObject(novoPedido);
             principalOOS.flush();
@@ -271,11 +271,12 @@ public class Cliente {
     
     public void uploadFicheiro(String fileToGet) {}
     
-    public void visualizarFicheiro() {
-        Path currentRelativePath = Paths.get("");
-        localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + localDirectoryPath);
-        File teste = new File (localDirectoryPath+"\\teste.txt");
+    public void visualizarFicheiro(String fileToGet) {
+        //Path currentRelativePath = Paths.get("");
+        //localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
+        //System.out.println("Current relative path is: " + localDirectoryPath);
+        String fileName = fileToGet.trim();
+        File teste = new File (localDirectoryPath+"\\"+fileName);
         if (teste.exists()) {
             Desktop dt = getDesktop();
             try {

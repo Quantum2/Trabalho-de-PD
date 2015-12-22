@@ -66,8 +66,8 @@ public class CascaCliente extends Observable {
         notifyObservers();
     }
     
-    public void visualizarFicheiro() {
-        this.c.visualizarFicheiro();
+    public void visualizarFicheiro(String fileToGet) {
+        this.c.visualizarFicheiro(fileToGet);
         setChanged();
         notifyObservers();
     }

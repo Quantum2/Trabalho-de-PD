@@ -5,11 +5,13 @@
  */
 package trabalho.de.pd;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Carlos Oliveira
  */
-public class ServidorInfo {
+public class ServidorInfo implements Serializable {
     String ip;
     int port;
     

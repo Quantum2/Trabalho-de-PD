@@ -47,6 +47,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
         this.cliente.addObserver(this);
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoCreateRowSorter(true);
         ListSelectionModel selectionModel = table.getSelectionModel();
         selectionModel.addListSelectionListener(this);
@@ -140,10 +141,10 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
     public String getSelected() {
         return (String) table.getValueAt(table.getSelectedRow(),table.getSelectedColumn());
     }
-
+    
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        janela.deselectTable(souServidor);
+        //janela.deselectTable(souServidor);
     }
     
     public void deselectTable() {

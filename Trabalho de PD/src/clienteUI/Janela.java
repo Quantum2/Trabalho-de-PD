@@ -79,10 +79,10 @@ public class Janela extends JFrame {
         painelListas = new JPanel(new GridLayout(1,2));
         painelPrincipal.add(painelListas,BorderLayout.CENTER);
         
-        listaServidor = new TabelaFicheiros(this,cliente,false);
-        painelListas.add(listaServidor);
-        listaCliente = new TabelaFicheiros(this,cliente,true);
+        listaCliente = new TabelaFicheiros(this,cliente,false);
         painelListas.add(listaCliente);
+        listaServidor = new TabelaFicheiros(this,cliente,true);
+        painelListas.add(listaServidor);
         
         painelBotoes = new JPanel(new GridLayout(2,2));
         botaoDownload = new JButton("Download");
@@ -155,7 +155,7 @@ public class Janela extends JFrame {
         botaoVisualizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cliente.visualizarFicheiro();
+                cliente.visualizarFicheiro(listaCliente.getSelected());
             }
         });
         setVisible(true);
