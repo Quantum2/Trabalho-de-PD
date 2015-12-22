@@ -100,15 +100,15 @@ public class CascaCliente extends Observable {
     
     public ListaFicheiros getListaFicheirosCliente() {
         ListaFicheiros lf = this.c.getListaFicheirosCliente();
-        setChanged();
-        notifyObservers();
+        //setChanged();
+        //notifyObservers();
         return lf;
     }
     
     public ListaFicheiros getListaFicheirosServidor() {
         ListaFicheiros lf = this.c.getListaFicheirosServidor();
-        setChanged();
-        notifyObservers();
+        //setChanged();
+        //notifyObservers();
         return lf;
     }
 }

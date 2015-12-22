@@ -67,8 +67,8 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
                 tableModel.addRow(new Object[]{auxFicheiro.getNome(), auxFicheiro.getBytes()});
             }
         }
-        Object[] p = {"a","b"};
-        tableModel.addRow(p);
+        //Object[] p = {"a","b"};
+        //tableModel.addRow(p);
         pane = new JScrollPane(table);
         setLayout(new BorderLayout());
         add(pane);
@@ -87,7 +87,33 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
     
     @Override
     public void update(Observable o, Object arg) {
-        janela.repaint();
+        tableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row,int column){
+                return false;
+            }
+        };
+        if (souServidor) {
+            if (cliente.getListaFicheirosServidor()!= null) {
+                listaFicheiros = cliente.getListaFicheirosServidor().getArrayListFicheiro();
+            }
+        } else {
+            if (cliente.getListaFicheirosCliente()!= null) {
+                listaFicheiros = cliente.getListaFicheirosCliente().getArrayListFicheiro();
+            }
+        }
+        tableModel.addColumn("Nome");
+        tableModel.addColumn("Tamanho");
+        if (listaFicheiros != null) {
+            tableModel.setRowCount(listaFicheiros.size());
+            for (Ficheiro ficheiro : listaFicheiros) {
+                Object[] p = {ficheiro.getNome(), ficheiro.getBytes()};
+                tableModel.addRow(p);
+            }
+        }
+        //Object [] p = {"adasd","asdasd"};
+        //tableModel.addRow(p);
+        table.setModel(tableModel);
     }
     
     @Override
@@ -100,8 +126,8 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
                 return false;
             }
         };
-        tableModel.addColumn("NomeADASD");
-        tableModel.addColumn("TamanhoASDASD");
+        tableModel.addColumn("Nome");
+        tableModel.addColumn("Tamanho");
         //tableModel.setRowCount(listaFicheiros.size());
         if (listaFicheiros != null) {
             for (Ficheiro ficheiro : listaFicheiros) {

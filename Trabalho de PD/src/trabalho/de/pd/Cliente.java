@@ -63,6 +63,7 @@ public class Cliente {
         Path currentRelativePath = Paths.get("");
         localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current relative path is: " + localDirectoryPath);
+        atualizaListaFicheirosCliente();
     }
         
     public void inicializa(String username,String password) {
@@ -290,7 +291,7 @@ public class Cliente {
         localDirectory = new File(localDirectoryPath);
         File[] listaFicheiros = localDirectory.listFiles();
          
-        listaFicheirosCliente.reset();
+        listaFicheirosCliente = new ListaFicheiros();
         
         for (File ficheiro : listaFicheiros) {
             Ficheiro ficheiroTemp = new Ficheiro(ficheiro.getName(),ficheiro.length());
