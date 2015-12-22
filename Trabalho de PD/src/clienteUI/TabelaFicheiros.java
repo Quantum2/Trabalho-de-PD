@@ -105,7 +105,7 @@ public class TabelaFicheiros extends JPanel implements Observer,ListSelectionLis
         tableModel.addColumn("Nome");
         tableModel.addColumn("Tamanho");
         if (listaFicheiros != null) {
-            tableModel.setRowCount(listaFicheiros.size());
+            //tableModel.setRowCount(listaFicheiros.size());
             for (Ficheiro ficheiro : listaFicheiros) {
                 Object[] p = {ficheiro.getNome(), ficheiro.getBytes()};
                 tableModel.addRow(p);

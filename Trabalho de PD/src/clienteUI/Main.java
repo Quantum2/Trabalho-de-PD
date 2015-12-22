@@ -15,8 +15,12 @@ public class Main {
     static Janela janela;
     
     public static void main (String args[]) {
-        CascaCliente cliente = new CascaCliente(new Cliente());
-        janela = new Janela("Programação Distribuida - Cliente", 300, 150, 640, 480, cliente);
+        if (args.length != 3) {
+            System.out.println("Argumentos Inválidos");
+        } else {
+            CascaCliente cliente = new CascaCliente(new Cliente(args[0],args[1],Integer.parseInt(args[2])));
+            janela = new Janela("Programação Distribuida - Cliente", 300, 150, 640, 480, cliente);
+        }
     }
     
 }

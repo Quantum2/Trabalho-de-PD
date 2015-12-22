@@ -39,8 +39,8 @@ import trabalho.de.pd.servidor.ListaFicheiros;
  * @author Carlos Oliveira
  */
 public class Cliente {
-    final static String HOSTNAME_DIRETORIA = "localhost";
-    final static int PORT_DIRETORIA = 7001;
+    static String HOSTNAME_DIRETORIA = "localhost";
+    static int PORT_DIRETORIA = 7001;
     final static int MAX_SIZE = 4000;
     final static int TIMEOUT = 5;
     
@@ -59,10 +59,13 @@ public class Cliente {
     File localDirectory = null;
     String localDirectoryPath = null;
     
-    public Cliente() {
-        Path currentRelativePath = Paths.get("");
-        localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + localDirectoryPath);
+    public Cliente(String diretoria, String ip, int port) {
+        //Path currentRelativePath = Paths.get("");
+        //localDirectoryPath = currentRelativePath.toAbsolutePath().toString();
+        //System.out.println("Current relative path is: " + localDirectoryPath);
+        localDirectoryPath = diretoria;
+        HOSTNAME_DIRETORIA = ip;
+        PORT_DIRETORIA = port;
         atualizaListaFicheirosCliente();
     }
         

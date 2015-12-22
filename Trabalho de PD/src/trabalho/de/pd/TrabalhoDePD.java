@@ -15,13 +15,16 @@ public class TrabalhoDePD {
      */  
     public static void main(String[] args) throws InterruptedException {
         
-        Cliente cliente = new Cliente();
-        //autentica deve devolver as informacoes do servidor
-        //cliente.autentica();
-        cliente.ligacaoServidor(/*Informacoes do servidor*/);
-        AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(cliente);
-        Thread atualizaFicheirosServidor= new Thread(runnableAtualizador);
-        
-        atualizaFicheirosServidor.join();
+        if (args.length != 3) {
+            System.out.println("Argumentos Errados");
+        } else {
+            Cliente cliente = new Cliente(args[0], args[1], Integer.parseInt(args[2]));
+            
+            cliente.ligacaoServidor();
+            AtualizaInformacaoServidor runnableAtualizador = new AtualizaInformacaoServidor(cliente);
+            Thread atualizaFicheirosServidor = new Thread(runnableAtualizador);
+
+            atualizaFicheirosServidor.join();
+        }
     }
 }
