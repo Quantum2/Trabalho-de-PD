@@ -20,6 +20,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import static java.lang.Thread.sleep;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -137,7 +138,7 @@ public class Cliente {
             socketServidor = new Socket(hostServidor, portServidor);
             System.out.println("Connection established");
             // SET THE SOCKET OPTION JUST IN CASE SERVER STALLS
-            socketServidor.setSoTimeout(TIMEOUT*400); // 5 * 400 = 2000ms
+            socketServidor.setSoTimeout(TIMEOUT*1000); // 5 * 1000 = 5000ms pq e preciso tempo para o servidor responder
             principalOut = socketServidor.getOutputStream();
             principalPrintStream = new PrintStream(principalOut);
             principalOOS = new ObjectOutputStream(principalOut);
@@ -264,6 +265,7 @@ public class Cliente {
             ObjectInputStream ois = new ObjectInputStream(socketServidor.getInputStream());
             Pedido pedido = (Pedido)ois.readObject();
             if (pedido.isAceite()) {
+                System.out.println("[CLIENTE] Pedido Upload aceite!");
                 FileInputStream fileIn = new FileInputStream(localDirectoryPath + "\\" + pedido.getNomeFicheiro());
                 int nbytes;
                 byte[] filechunck = new byte[Servidor.MAX_SIZE];
@@ -282,7 +284,15 @@ public class Cliente {
             System.out.println("[CLIENTE - uploadFicheiro] Error - " + ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }finally {
+                atualizaListaFicheirosCliente();
+            try {
+                sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                atualizaListaFicheirosServidor();
+            } 
     }
     
     public void visualizarFicheiro(String fileToGet) {
@@ -303,6 +313,20 @@ public class Cliente {
     
     public void setListaFicheirosServidor(ListaFicheiros listaFicheirosServidor) {
         this.listaFicheirosServidor=listaFicheirosServidor;
+    }
+    
+    public void atualizaListaFicheirosServidor(){
+        enviaPedido("",Pedido.ACTUALIZACAO);
+        ObjectInputStream ois;
+        try {
+            ois = new ObjectInputStream(socketServidor.getInputStream());
+            listaFicheirosServidor = (ListaFicheiros)ois.readObject();
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public void atualizaListaFicheirosCliente() {
