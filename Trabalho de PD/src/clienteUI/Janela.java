@@ -149,7 +149,8 @@ public class Janela extends JFrame {
         botaoEliminar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cliente.enviaPedido(listaCliente.getSelected(), Pedido.ELIMINAR);
+                cliente.enviaPedido(listaServidor.getSelected(), Pedido.ELIMINAR);
+                cliente.removeActualizacao();
             }
         });
         

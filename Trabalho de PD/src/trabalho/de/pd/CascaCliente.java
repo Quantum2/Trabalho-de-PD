@@ -111,4 +111,10 @@ public class CascaCliente extends Observable {
         //notifyObservers();
         return lf;
     }
+    
+    public void removeActualizacao(){
+        this.c.removeActualizacao();
+        setChanged();
+        notifyObservers();
+    }
 }

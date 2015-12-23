@@ -356,4 +356,17 @@ public class Cliente {
     public ListaFicheiros getListaFicheirosServidor() {
         return listaFicheirosServidor;
     }
+    
+    public void removeActualizacao(){
+        try {
+            socketServidor.setSoTimeout(20000);
+            ObjectInputStream ois=new ObjectInputStream(socketServidor.getInputStream());
+            listaFicheirosServidor=(ListaFicheiros)ois.readObject();
+            socketServidor.setSoTimeout(TIMEOUT*1000);
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }     
+    }
 }
