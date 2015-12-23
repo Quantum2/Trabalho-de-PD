@@ -11,6 +11,7 @@ import static java.awt.Desktop.getDesktop;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +35,7 @@ import trabalho.de.pd.servidor.Ficheiro;
 import trabalho.de.pd.servidor.HeartBeat;
 import trabalho.de.pd.servidor.ListaFicheiros;
 import trabalho.de.pd.servidor.Pedido;
+import trabalho.de.pd.servidor.Servidor;
 
 /**
  *
@@ -67,6 +69,8 @@ public class Cliente {
         localDirectoryPath = diretoria;
         HOSTNAME_DIRETORIA = ip;
         PORT_DIRETORIA = port;
+        localDirectory=new File(localDirectoryPath);
+        //for(File file: localDirectory.listFiles()) file.delete();
         atualizaListaFicheirosCliente();
     }
         
@@ -248,10 +252,38 @@ public class Cliente {
                 System.out.println("Ocorreu um erro ao nível do socket TCP:\n\t"+e);
             }catch(IOException e){
                 System.out.println("Ocorreu um erro no acesso ao socket ou ao ficheiro local " + localFilePath +":\n\t"+e);
-            }       
+            }finally {
+                atualizaListaFicheirosCliente();
+            }     
    }
     
-    public void uploadFicheiro(String fileToGet) {}
+    public void uploadFicheiro(String fileToGet) {
+        enviaPedido(fileToGet,Pedido.UPLOAD);
+        
+        try {
+            ObjectInputStream ois = new ObjectInputStream(socketServidor.getInputStream());
+            Pedido pedido = (Pedido)ois.readObject();
+            if (pedido.isAceite()) {
+                FileInputStream fileIn = new FileInputStream(localDirectoryPath + "\\" + pedido.getNomeFicheiro());
+                int nbytes;
+                byte[] filechunck = new byte[Servidor.MAX_SIZE];
+                OutputStream outputFicheiro;
+                if (pedido.getSocketPrimario()!=null) {
+                    outputFicheiro = pedido.getSocketPrimario().getOutputStream();
+                } else {
+                    outputFicheiro = socketServidor.getOutputStream();
+                }
+                while ((nbytes = fileIn.read(filechunck)) > 0) {
+                    outputFicheiro.write(filechunck, 0, nbytes);
+                    outputFicheiro.flush();
+                }
+            }
+        } catch (IOException ex) {
+            System.out.println("[CLIENTE - uploadFicheiro] Error - " + ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public void visualizarFicheiro(String fileToGet) {
         //Path currentRelativePath = Paths.get("");
