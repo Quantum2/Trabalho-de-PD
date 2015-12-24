@@ -359,6 +359,7 @@ public class Cliente {
     
     public void removeActualizacao(){
         try {
+            sleep(10000);
             socketServidor.setSoTimeout(20000);
             ObjectInputStream ois=new ObjectInputStream(socketServidor.getInputStream());
             listaFicheirosServidor=(ListaFicheiros)ois.readObject();
@@ -366,6 +367,8 @@ public class Cliente {
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }     
     }
