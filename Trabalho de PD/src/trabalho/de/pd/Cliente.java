@@ -287,7 +287,7 @@ public class Cliente {
         }finally {
                 atualizaListaFicheirosCliente();
             try {
-                sleep(5000);
+                sleep(10000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -359,7 +359,7 @@ public class Cliente {
     
     public void removeActualizacao(){
         try {
-            sleep(10000);
+            sleep(5000);
             socketServidor.setSoTimeout(20000);
             ObjectInputStream ois=new ObjectInputStream(socketServidor.getInputStream());
             listaFicheirosServidor=(ListaFicheiros)ois.readObject();
