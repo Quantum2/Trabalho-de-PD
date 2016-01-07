@@ -71,7 +71,7 @@ public class Cliente {
         HOSTNAME_DIRETORIA = ip;
         PORT_DIRETORIA = port;
         localDirectory=new File(localDirectoryPath);
-        //for(File file: localDirectory.listFiles()) file.delete();
+        for(File file: localDirectory.listFiles()) file.delete();
         atualizaListaFicheirosCliente();
     }
         
