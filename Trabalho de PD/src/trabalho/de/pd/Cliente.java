@@ -94,6 +94,7 @@ public class Cliente {
             System.out.println("Binding to a local port");
             // CREATE A DATAGRAM SOCKET, BOUND TO ANY AVAILABLE LOCAL PORT
             DatagramSocket socket = new DatagramSocket();
+            socket.setSoTimeout(5000);
             System.out.println("Bound to local port " + socket.getLocalPort());
             
             // CREATE A DATAGRAM PACKET, CONTAINING OUR BYTE ARRAY
